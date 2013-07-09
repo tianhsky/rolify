@@ -12,11 +12,13 @@ module Rolify
         roles
       end
 
-      def with_role(role_name, user = nil)
-        if role_name.is_a? Array
-          role_name.map!(&:to_s)
-        else
-          role_name = role_name.to_s
+      def with_role(role_name = nil, user = nil)
+        unless role_name.nil?
+          if role_name.is_a? Array
+            role_name.map!(&:to_s)
+          else
+            role_name = role_name.to_s
+          end
         end
         resources = self.adapter.resources_find(self.role_table_name, self, role_name)
         user ? self.adapter.in(resources, user, role_name) : resources

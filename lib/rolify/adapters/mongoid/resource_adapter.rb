@@ -4,7 +4,12 @@ module Rolify
   module Adapter
     class ResourceAdapter < ResourceAdapterBase
       def resources_find(roles_table, relation, role_name)
-        roles = roles_table.classify.constantize.where(:name.in => Array(role_name), :resource_type => relation.to_s)
+        if role_name.nil?
+          roles = roles_table.classify.constantize.where(:resource_type => relation.to_s)
+        else
+          roles = roles_table.classify.constantize.where(:name.in => Array(role_name), :resource_type => relation.to_s)
+        end
+        
         resources = []
         roles.each do |role|
           if role.resource_id.nil?
