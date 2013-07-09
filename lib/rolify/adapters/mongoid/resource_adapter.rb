@@ -22,7 +22,9 @@ module Rolify
       end
 
       def in(resources, user, role_names)
-        roles = user.roles.where(:name.in => Array(role_names))
+        unless role_names.nil
+          roles = user.roles.where(:name.in => Array(role_names))
+        end
         return [] if resources.empty? || roles.empty?
         resources.delete_if { |resource| (resource.applied_roles & roles).empty? }
         resources
